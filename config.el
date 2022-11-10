@@ -74,5 +74,3 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)

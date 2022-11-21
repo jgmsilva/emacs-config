@@ -41,8 +41,9 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
-(after! org-journal
-  (setq org-journal-enable-agenda-integration t))
+(setq org-agenda-files (directory-files-recursively org-directory "\.org$"))
+(after! lsp-haskell
+  (setq lsp-haskell-formatting-provider "brittany"))
 
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
 ;; Whenever you reconfigure a package, make sure to wrap your config in an

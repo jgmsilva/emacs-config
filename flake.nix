@@ -14,10 +14,9 @@
     };
     inherit(flake-utils.lib) mkApp;
   in {
+    inherit doom-emacs;
 
-    packages.x86_64-linux.doom-emacs = doom-emacs;
-
-    packages.x86_64-linux.default = self.packages.x86_64-linux.doom-emacs;
+    packages.x86_64-linux.default = self.doom-emacs;
 
     apps.x86_64-linux.default = mkApp { drv = self.packages.x86_64-linux.default; exePath = "/bin/emacs"; };
   };

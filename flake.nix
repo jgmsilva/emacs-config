@@ -13,7 +13,7 @@
     };
     flake-utils.url = "github:numtide/flake-utils";
   };
-  outputs = { self, nix-doom-emacs, emacs-overlay, flake-utils }:
+  outputs = { self, nixpkgs, nix-doom-emacs, emacs-overlay, flake-utils }:
   let
     system = "x86_64-linux";
     doom-emacs = nix-doom-emacs.packages.${system}.default.override {

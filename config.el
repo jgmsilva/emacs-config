@@ -43,7 +43,10 @@
 (setq org-directory "~/org/")
 (setq org-agenda-files (directory-files-recursively org-directory "\.org$"))
 (after! lsp-haskell
-  (setq lsp-haskell-formatting-provider "brittany"))
+  (setq lsp-haskell-formatting-provider "stylish-haskell"))
+
+(custom-set-variables
+ '(haskell-stylish-on-save t))
 
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
 

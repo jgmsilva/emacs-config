@@ -52,7 +52,8 @@
 
 
 (after! evil-escape
-  (setq evil-escape-key-sequence "jj"))
+  (setq evil-escape-key-sequence "jj")
+  (setq evil-escape-delay 0.4))
 
 
 (use-package! nov

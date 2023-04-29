@@ -42,6 +42,19 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 (setq org-agenda-files (directory-files-recursively org-directory "\.org$"))
+
+(setq org-roam-capture-templates
+      '(("d" "default" plain "%?"
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                        "#+title: ${title}\n")
+        :unnarrowed t)
+        ("l" "log" plain "%?"
+        :target (file+head "log/%<%Y%m%d%H%M%S>-${slug}.org.gpg"
+                        "#+title: ${title} - %<%Y-%m-%d>\n")
+        :unnarrowed t)))
+
+
+
 (after! lsp-haskell
   (setq lsp-haskell-formatting-provider "stylish-haskell"))
 

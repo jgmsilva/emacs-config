@@ -74,6 +74,11 @@
   :config
   (setq nov-save-place-file (concat doom-cache-dir "nov-places")))
 
+(after! org-noter
+  (setq org-noter-always-create-frame nil))
+(after! flyspell
+  (setq ispell-dictionary "pt_BR"))
+
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;

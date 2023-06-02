@@ -79,6 +79,36 @@
 (after! flyspell
   (setq ispell-dictionary "pt_BR"))
 
+(setq org-todo-keywords
+      '((sequence
+         "WAIT(w)"  ; Something external is holding up this task
+         "HOLD(h)"  ; This task is paused/on hold because of me
+         "|"
+         "TODO(t)"  ; A task that needs doing & is ready to do
+         "|"
+         "NEXT(n)"  ; A task that is in progress
+         "OPEN(o)"  ; An open or ongoing loop
+         "PROJ(p)"  ; A project, which usually contains other tasks
+         "|"
+         "DONE(d)"  ; Task successfully completed
+         "KILL(K)") ; Task was cancelled, aborted or is no longer applicable
+        (sequence
+         "[ ](T)"   ; A task that needs doing
+         "|"
+         "[-](S)"   ; Task is in progress
+         "[?](W)"   ; Task is being held up or paused
+         "|"
+         "[X](D)")  ; Task was completed
+        (sequence   ; adapted from Tony Ballantyne's writing methodology
+         "IDEA(i!)"
+         "WRITE(w!)"
+         "EDIT(e!)"
+         "WORKING(k!)"
+         "|"
+         "USED(u!/@)")))
+
+
+
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;

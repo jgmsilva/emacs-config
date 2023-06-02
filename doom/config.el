@@ -67,6 +67,7 @@
 (after! evil-escape
   (setq evil-escape-key-sequence "jj")
   (setq evil-escape-delay 0.4))
+(map! :leader "o c" #'=calendar :desc "Calendar")
 
 
 (use-package! nov

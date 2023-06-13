@@ -3,7 +3,10 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-
+;; fix to show doom-dashboard on wsl
+;; (add-hook! 'emacs-startup-hook #'doom-init-ui-h)
+;; (setq inhibit-splash-screen t)
+;; (setq inhibit-startup-message t)
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "John Doe"
@@ -36,7 +39,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -68,6 +71,25 @@
   (setq evil-escape-key-sequence "jj")
   (setq evil-escape-delay 0.4))
 (map! :leader "o c" #'=calendar :desc "Calendar")
+(defun org-roam-node-visit-by-name (name)
+  (if-let ((id (caar (org-roam-db-query [:select id :from nodes :where (= title $s1) :limit 1] name))))
+      (org-roam-node-visit (org-roam-populate (org-roam-node-create :id id)))
+    (error "No node with this title")))
+(defun org-roam-node-id-by-title (title)
+  "Get a node ID by its title, whether original title or alias"
+  (caar (org-roam-db-query [:select id
+                            :from [:select [(as node_id id)
+                                            (as alias title)]
+                                   :from aliases
+                                   :union-all
+                                   :select [id title]
+                                   :from nodes]
+                            :where (= title $s1)
+                            :limit 1] title)))
+(defun get-roam-index ()
+  (interactive)
+  (org-roam-node-visit-by-name "Index"))
+(map! :leader "n r SPC" #'get-roam-index :desc "Roam Index File")
 
 
 (use-package! nov
@@ -80,13 +102,13 @@
 (after! flyspell
   (setq ispell-dictionary "pt_BR"))
 
-(setq org-todo-keywords
+(after! org
+  (setq org-log-done 'time)
+  (setq org-todo-keywords
       '((sequence
          "WAIT(w)"  ; Something external is holding up this task
          "HOLD(h)"  ; This task is paused/on hold because of me
-         "|"
          "TODO(t)"  ; A task that needs doing & is ready to do
-         "|"
          "NEXT(n)"  ; A task that is in progress
          "OPEN(o)"  ; An open or ongoing loop
          "PROJ(p)"  ; A project, which usually contains other tasks
@@ -95,7 +117,6 @@
          "KILL(K)") ; Task was cancelled, aborted or is no longer applicable
         (sequence
          "[ ](T)"   ; A task that needs doing
-         "|"
          "[-](S)"   ; Task is in progress
          "[?](W)"   ; Task is being held up or paused
          "|"
@@ -106,9 +127,23 @@
          "EDIT(e!)"
          "WORKING(k!)"
          "|"
-         "USED(u!/@)")))
+         "USED(u!/@)"))))
 
-
+(defvar org-project "TODO={ PROJ }")
+(after! org-agenda
+  (setq org-stuck-projects
+        `(,org-project ("NEXT" "WORKING") nil ""))
+  (setq org-agenda-custom-commands
+      '(("p" . "Priorities")
+        ("pa" "A items" tags-todo "+PRIORITY=\"A\"")
+        ("pb" "B items" tags-todo "+PRIORITY=\"B\"")
+        ("pc" "C items" tags-todo "+PRIORITY=\"C\"")
+        ;; ...other commands here
+        ))
+  (setq org-agenda-skip-deadline-if-done t)
+  (setq org-agenda-skip-scheduled-if-done t)
+  (setq org-agenda-skip-timestamp-if-done t)
+  (setq org-agenda-skip-deadline-prewarning-if-scheduled t))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.

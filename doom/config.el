@@ -148,6 +148,11 @@
       (executable-find (getenv "BROWSER"))
        browse-url-browser-function 'browse-url-generic)
 
+
+;; set timer for g-s-/ command
+(after! avy
+  (setq avy-timeout-seconds 1.0))
+
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;

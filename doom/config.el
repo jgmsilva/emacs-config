@@ -130,6 +130,8 @@
          "USED(u!/@)"))))
 
 (defvar org-project "TODO={ PROJ }")
+
+;; TODO add org-super-agenda and add priority filter
 (after! org-agenda
   (setq org-stuck-projects
         `(,org-project ("NEXT" "WORKING") nil ""))
@@ -153,6 +155,24 @@
 (after! avy
   (setq avy-timeout-seconds 1.0))
 
+(defun my/org-inherited-priority (s)
+  (cond
+
+   ;; Priority cookie in this heading
+   ((string-match org-priority-regexp s)
+    (* 1000 (- org-priority-lowest
+               (org-priority-to-value (match-string 2 s)))))
+
+   ;; No priority cookie, but already at highest level
+   ((not (org-up-heading-safe))
+    (* 1000 (- org-priority-lowest org-priority-default)))
+
+   ;; Look for the parent's priority
+   (t
+    (my/org-inherited-priority (org-get-heading)))))
+
+(after! org
+  (setq org-priority-get-priority-function #'my/org-inherited-priority))
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;

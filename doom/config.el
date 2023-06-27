@@ -108,7 +108,13 @@
   (setq org-noter-always-create-frame nil))
 (after! flyspell
   (setq ispell-dictionary "pt_BR"))
-
+(after! org
+  (add-hook 'org-mode-hook 'my/set-org-dict))
+(defun my/set-org-dict ()
+(when (derived-mode-p 'org-mode)
+      (let ((language (cdr (assoc "LANGUAGE" (org-collect-keywords '("LANGUAGE"))))))
+        (when language
+          (setq ispell-local-dictionary (car language))))))
 (after! org
   (setq org-log-done 'time)
   (setq org-todo-keywords

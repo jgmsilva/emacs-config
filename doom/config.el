@@ -96,7 +96,7 @@
 (defun get-roam-index ()
   (interactive)
   (org-roam-node-visit-by-name "Index"))
-(map! :leader "n r SPC" #'get-roam-index :desc "Roam Index File")
+(map! :leader "n SPC" #'get-roam-index :desc "Roam Index File")
 
 
 (use-package! nov

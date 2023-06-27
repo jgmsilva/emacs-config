@@ -7,6 +7,7 @@
 
 (package! nov)
 (package! org-tracktable)
+(package! org-alert)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 

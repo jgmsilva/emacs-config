@@ -55,7 +55,14 @@
         :target (file+head "log/%<%Y%m%d%H%M%S>-${slug}.org.gpg"
                         "#+title: ${title} - %<%Y-%m-%d>\n")
         :unnarrowed t)))
-
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         "* %?"
+         :target (file+head "%<%Y-%m-%d>.org"
+                            (concat "#+title: %<%Y-%m-%d>\n"
+                                    "#+begin_src emacs-lisp :results value raw\n"
+                                    "(as/get-daily-agenda \"%<%Y-%m-%d>\")\n"
+                                    "#+end_src\n")))))
 
 
 (after! lsp-haskell
@@ -139,6 +146,12 @@
         ("pb" "B items" tags-todo "+PRIORITY=\"B\"")
         ("pc" "C items" tags-todo "+PRIORITY=\"C\"")
         ;; ...other commands here
+        ("d" "Daily schedule"
+         ((agenda ""
+          ((org-agenda-span 'day)
+           (org-agenda-use-time-grid nil)
+           ;; (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
+           ))))
         ))
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
@@ -148,7 +161,21 @@
       (executable-find (getenv "BROWSER"))
        browse-url-browser-function 'browse-url-generic)
 
-
+(defun as/get-daily-agenda (&optional date)
+  "Return the agenda for the day as a string."
+  (interactive)
+  (let ((file (make-temp-file "daily-agenda" nil ".txt")))
+    (org-agenda nil "d" nil)
+    (when date (org-agenda-goto-date date))
+    (org-agenda-write file nil nil "*Org Agenda*")
+    (kill-buffer)
+    (with-temp-buffer
+      (insert-file-contents file)
+      (goto-char (point-min))
+      (kill-line 2)
+      (while (re-search-forward "^  " nil t)
+        (replace-match "- " nil nil))
+      (buffer-string))))
 ;; set timer for g-s-/ command
 (after! avy
   (setq avy-timeout-seconds 1.0))

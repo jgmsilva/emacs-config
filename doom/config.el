@@ -59,10 +59,10 @@
       '(("d" "default" entry
          "* %?"
          :target (file+head "%<%Y-%m-%d>.org"
-                            (concat "#+title: %<%Y-%m-%d>\n"
-                                    "#+begin_src emacs-lisp :results value raw\n"
-                                    "(as/get-daily-agenda \"%<%Y-%m-%d>\")\n"
-                                    "#+end_src\n")))))
+"#+title: %<%Y-%m-%d>
+#+begin_src emacs-lisp :results value raw
+(as/get-daily-agenda \"%<%Y-%m-%d>\")
+#+end_src"))))
 
 
 (after! lsp-haskell
@@ -164,6 +164,8 @@
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-skip-timestamp-if-done t)
+  (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+  (setq org-agenda-skip-scheduled-delay-if-deadline t)
   (setq org-agenda-skip-deadline-prewarning-if-scheduled t))
 (setq browse-url-generic-program
       (executable-find (getenv "BROWSER"))

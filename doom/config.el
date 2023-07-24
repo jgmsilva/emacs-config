@@ -105,6 +105,7 @@
   (setq nov-save-place-file (concat doom-cache-dir "nov-places")))
 
 (after! org-noter
+  (setq org-noter-kill-frame-at-session-end nil)
   (setq org-noter-always-create-frame nil))
 (after! flyspell
   (setq ispell-dictionary "pt_BR"))

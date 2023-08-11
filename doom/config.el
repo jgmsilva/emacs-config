@@ -120,9 +120,9 @@
   (setq org-log-done 'time)
   (setq org-todo-keywords
       '((sequence
+         "TODO(t)"  ; A task that needs doing & is ready to do
          "WAIT(w)"  ; Something external is holding up this task
          "HOLD(h)"  ; This task is paused/on hold because of me
-         "TODO(t)"  ; A task that needs doing & is ready to do
          "NEXT(n)"  ; A task that is in progress
          "OPEN(o)"  ; An open or ongoing loop
          "PROJ(p)"  ; A project, which usually contains other tasks
@@ -209,6 +209,9 @@
 
 (after! org
   (setq org-priority-get-priority-function #'my/org-inherited-priority))
+
+(after! fcitx
+  (setq fcitx-remote-command "fcitx5-remote"))
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;

@@ -24,9 +24,9 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+(setq doom-font (font-spec :family "Victor Mono" :size 14 :weight 'semibold))
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-(setq doom-unicode-font (font-spec :family "FiraCode Nerd Font Mono"))
+;; (setq doom-unicode-font (font-spec :family "FiraCode Nerd Font Mono"))
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
@@ -99,7 +99,13 @@ Personal Log"))))
   (interactive)
   (org-roam-node-visit-by-name "Index"))
 (map! :leader "n SPC" #'get-roam-index :desc "Roam Index File")
-
+(defun org-toggle-emphasis ()
+  "Toggle hiding/showing of org emphasize markers."
+  (interactive)
+  (if org-hide-emphasis-markers
+      (set-variable 'org-hide-emphasis-markers nil)
+    (set-variable 'org-hide-emphasis-markers t)))
+(map! :map org-mode-map "C-c e" #'org-toggle-emphasis :desc "togle bold and italic characters")
 
 (use-package! nov
   :mode ("\\.epub\\'" . nov-mode)
@@ -150,7 +156,10 @@ Personal Log"))))
 ;; TODO add org-super-agenda and add priority filter
 (after! org-agenda
   (setq org-stuck-projects
-        `(,org-project ("NEXT" "WORKING") nil ""))
+        `(,org-project nil nil (rx (group "TODO")
+      (1+ anything)
+      (group (or "SCHEDULED:" "DEADLINE:") (1+ anything)))))
+
   (setq org-agenda-custom-commands
       '(("p" . "Priorities")
         ("pa" "A items" tags-todo "+PRIORITY=\"A\"")

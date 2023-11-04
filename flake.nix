@@ -42,7 +42,7 @@
     in
     {
       inherit doom-emacs gnu-emacs;
-
+      doom-config = ./doom;
       packages.x86_64-linux.gnu-emacs = self.gnu-emacs;
       packages.x86_64-linux.doom-emacs = self.doom-emacs;
       packages.x86_64-linux.default = self.packages.x86_64-linux.doom-emacs;

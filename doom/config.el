@@ -48,18 +48,18 @@
 
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?"
-        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                        "#+title: ${title}\n")
-        :unnarrowed t)
+         :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                            "#+title: ${title}\n")
+         :unnarrowed t)
         ("l" "log" plain "%?"
-        :target (file+head "log/%<%Y%m%d%H%M%S>-${slug}.org.gpg"
-                        "#+title: ${title} - %<%Y-%m-%d>\n")
-        :unnarrowed t)))
+         :target (file+head "log/%<%Y%m%d%H%M%S>-${slug}.org.gpg"
+                            "#+title: ${title} - %<%Y-%m-%d>\n")
+         :unnarrowed t)))
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry
          "* %?"
          :target (file+head "%<%Y-%m-%d>.org"
-"#+title: %<%Y-%m-%d>
+                            "#+title: %<%Y-%m-%d>
 #+begin_src emacs-lisp :results value raw
 (as/get-daily-agenda \"%<%Y-%m-%d>\")
 #+end_src
@@ -120,36 +120,39 @@ Personal Log"))))
 (after! org
   (add-hook 'org-mode-hook 'my/set-org-dict))
 (defun my/set-org-dict ()
-(when (derived-mode-p 'org-mode)
-      (let ((language (cdr (assoc "LANGUAGE" (org-collect-keywords '("LANGUAGE"))))))
-        (when language
-          (setq ispell-local-dictionary (car language))))))
+  (when (derived-mode-p 'org-mode)
+    (let ((language (cdr (assoc "LANGUAGE" (org-collect-keywords '("LANGUAGE"))))))
+      (when language
+        (setq ispell-local-dictionary (car language))))))
 (after! org
   (setq org-log-done 'time)
   (setq org-todo-keywords
-      '((sequence
-         "TODO(t)"  ; A task that needs doing & is ready to do
-         "WAIT(w)"  ; Something external is holding up this task
-         "HOLD(h)"  ; This task is paused/on hold because of me
-         "NEXT(n)"  ; A task that is in progress
-         "OPEN(o)"  ; An open or ongoing loop
-         "PROJ(p)"  ; A project, which usually contains other tasks
-         "|"
-         "DONE(d)"  ; Task successfully completed
-         "KILL(K)") ; Task was cancelled, aborted or is no longer applicable
-        (sequence
-         "[ ](T)"   ; A task that needs doing
-         "[-](S)"   ; Task is in progress
-         "[?](W)"   ; Task is being held up or paused
-         "|"
-         "[X](D)")  ; Task was completed
-        (sequence   ; adapted from Tony Ballantyne's writing methodology
-         "IDEA(i!)"
-         "WRITE(w!)"
-         "EDIT(e!)"
-         "WORKING(k!)"
-         "|"
-         "USED(u!/@)"))))
+        '((sequence
+           "TODO(t)"  ; A task that needs doing & is ready to do
+           "WAIT(w)"  ; Something external is holding up this task
+           "HOLD(h)"  ; This task is paused/on hold because of me
+           "NEXT(n)"  ; A task that is in progress
+           "OPEN(o)"  ; An open or ongoing loop
+           "|"
+           "DONE(d)"  ; Task successfully completed
+           "KILL(K)") ; Task was cancelled, aborted or is no longer applicable
+          (sequence
+           "PROJ(p)"  ; A project, which usually contains other tasks
+           "|"
+           "PROJDONE(P)")
+          (sequence
+           "[ ](T)"   ; A task that needs doing
+           "[-](S)"   ; Task is in progress
+           "[?](W)"   ; Task is being held up or paused
+           "|"
+           "[X](D)")  ; Task was completed
+          (sequence   ; adapted from Tony Ballantyne's writing methodology
+           "IDEA(i!)"
+           "WRITE(w!)"
+           "EDIT(e!)"
+           "WORKING(k!)"
+           "|"
+           "USED(u!/@)"))))
 
 (defvar org-project "TODO={ PROJ }")
 
@@ -157,22 +160,23 @@ Personal Log"))))
 (after! org-agenda
   (setq org-stuck-projects
         `(,org-project nil nil (rx (group "TODO")
-      (1+ anything)
-      (group (or "SCHEDULED:" "DEADLINE:") (1+ anything)))))
+                                   (1+ anything)
+                                   (group (or "SCHEDULED:" "DEADLINE:") (1+ anything)))))
 
   (setq org-agenda-custom-commands
-      '(("p" . "Priorities")
-        ("pa" "A items" tags-todo "+PRIORITY=\"A\"")
-        ("pb" "B items" tags-todo "+PRIORITY=\"B\"")
-        ("pc" "C items" tags-todo "+PRIORITY=\"C\"")
-        ;; ...other commands here
-        ("d" "Daily schedule"
-         ((agenda ""
-          ((org-agenda-span 'day)
-           (org-agenda-use-time-grid nil)
-           ;; (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
-           ))))
-        ))
+        '(("p" . "Priorities")
+          ("pa" "A items" tags-todo "+PRIORITY=\"A\"")
+          ("pb" "B items" tags-todo "+PRIORITY=\"B\"")
+          ("pc" "C items" tags-todo "+PRIORITY=\"C\"")
+          ;; ...other commands here
+          ("d" "Daily schedule"
+           ((agenda ""
+                    ((org-agenda-span 'day)
+                     (org-agenda-use-time-grid nil)
+                     ;; (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
+                     ))))
+          ))
+  (setq org-agenda-sticky t)
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-skip-timestamp-if-done t)
@@ -181,7 +185,7 @@ Personal Log"))))
   (setq org-agenda-skip-deadline-prewarning-if-scheduled t))
 (setq browse-url-generic-program
       (executable-find (getenv "BROWSER"))
-       browse-url-browser-function 'browse-url-generic)
+      browse-url-browser-function 'browse-url-generic)
 
 (defun as/get-daily-agenda (&optional date)
   "Return the agenda for the day as a string."

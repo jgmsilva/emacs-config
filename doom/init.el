@@ -124,7 +124,7 @@
        (dart +flutter +lsp)   ; paint ui and not much else
        ;;dhall
        ( elixir +lsp +tree-sitter)            ; erlang done right
-       ;;elm               ; care for a cup of TEA?
+       (elm +lsp +tree-sitter)               ; care for a cup of TEA?
        emacs-lisp        ; drown in parentheses
        ;;erlang            ; an elegant language for a more civilized age
        ;;ess               ; emacs speaks statistics
@@ -173,7 +173,7 @@
        ;;terra             ; Earth and Moon in alignment for performance.
        (web +lsp +tree-sitter)               ; the tubes
        ;;yaml              ; JSON, but readable
-       ;;zig               ; C, but simpler
+       (zig +tree-sitter)               ; C, but simpler
 
        :email
        ;;(mu4e +org +gmail)

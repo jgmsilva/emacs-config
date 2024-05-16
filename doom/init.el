@@ -155,7 +155,7 @@
        (org +pandoc +pretty +noter +roam2 +pomodoro)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
-       ;;purescript        ; javascript, but functional
+       (purescript +lsp)        ; javascript, but functional
        (python +lsp +pyright +tree-sitter)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs

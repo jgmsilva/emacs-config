@@ -44,7 +44,17 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
-(setq org-agenda-files (directory-files-recursively org-directory "\.org$"))
+
+(require 'seq)
+(require 'org-ql)
+(defun meliache/get-active-roam-files ()
+  (seq-uniq
+   (org-ql-select (directory-files-recursively org-directory "\.org$")
+     '(todo)
+     :action #'buffer-file-name)))
+
+
+(setq org-agenda-files (meliache/get-active-roam-files))
 
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?"

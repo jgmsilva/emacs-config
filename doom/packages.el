@@ -9,6 +9,7 @@
 (package! org-tracktable)
 (package! org-ql)
 (package! org-super-agenda)
+(package! org-timeblock)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
                                         ;(package! some-package)
 

@@ -47,6 +47,13 @@
 (setq shell-file-name (executable-find "bash"))
 (setq-default vterm-shell (executable-find "fish"))
 
+(defconst mestradobib-path (concat org-directory "Mestrado_IPB.bib"))
+(defconst securitybib-path (concat org-directory "Cybersecurity.bib"))
+(defconst calibrebib-path (concat org-directory "CalibreBib.bib"))
+
+(after! org-cite
+  (setq org-cite-global-bibliography (list calibrebib-path mestradobib-path securitybib-path)))
+
 
 (require 'seq)
 (require 'org-ql)
@@ -57,7 +64,11 @@
      :action #'buffer-file-name)))
 
 
-(setq org-agenda-files (meliache/get-active-roam-files))
+(setq org-agenda-files (directory-files-recursively org-directory "\.org$"))
+
+(use-package! citar
+  :custom
+  (citar-bibliography (list calibrebib-path mestradobib-path)))
 
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?"

@@ -165,6 +165,21 @@ Personal Log"))))
            "USED(u!/@)"))))
 
 (defvar org-project "TODO={ PROJ }")
+;;
+;; Setting variables for the ics file path
+(setq org-agenda-private-local-path "/tmp/dummy.ics")
+(defun org-agenda-export-to-ics ()
+  (org-batch-store-agenda-views)
+
+  ;; Org mode correctly exports TODO keywords as VTODO events in ICS.
+  ;; However, some proprietary calendars do not really work with
+  ;; standards (looking at you Google), so VTODO is ignored and only
+  ;; VEVENT is read.
+  (with-current-buffer (find-file-noselect org-agenda-private-local-path)
+    (goto-char (point-min))
+    (while (re-search-forward "VTODO" nil t)
+      (replace-match "VEVENT"))
+    (save-buffer)))
 
 ;; TODO add org-super-agenda and add priority filter
 (after! org-agenda
@@ -174,7 +189,8 @@ Personal Log"))))
                                    (group (or "SCHEDULED:" "DEADLINE:") (1+ anything)))))
 
   (setq org-agenda-custom-commands
-        '(("p" . "Priorities")
+        '(("X" agenda "" nil ,(list org-agenda-private-local-path))
+          ("p" . "Priorities")
           ("pa" "A items" tags-todo "+PRIORITY=\"A\"")
           ("pb" "B items" tags-todo "+PRIORITY=\"B\"")
           ("pc" "C items" tags-todo "+PRIORITY=\"C\"")
@@ -186,7 +202,7 @@ Personal Log"))))
                      ;; (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
                      ))))
           ))
-  (setq org-agenda-sticky t)
+  ;; (setq org-agenda-sticky t)
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-skip-timestamp-if-done t)

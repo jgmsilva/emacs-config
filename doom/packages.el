@@ -10,6 +10,12 @@
 (package! org-ql)
 (package! org-super-agenda)
 (package! org-timeblock)
+(package! org-hyperscheduler
+  :recipe ( :repo "dmitrym0/org-hyperscheduler"
+                  :host github
+                  :type git
+                  :files ("*")))
+(package! org-roam-ui)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
                                         ;(package! some-package)
 

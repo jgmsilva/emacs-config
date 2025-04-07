@@ -89,6 +89,23 @@
 #+end_src
 
 Personal Log"))))
+(require 'org-roam-dailies)
+(defun my/org-roam-dailies-get-weekly-note-date ()
+  "Return the date string for the most recent Sunday in the current week."
+  (let* ((today (current-time))
+         (decoded (decode-time today))
+         (dow (nth 6 decoded))  ;; 0 = Sunday, 1 = Monday, etc.
+         (offset (if (= dow 0) 0 dow)))  ;; if not Sunday, subtract days equal to day-of-week
+    ;; (format-time-string "%Y-%m-%d" (time-subtract today (days-to-time offset)))))
+    (time-subtract today (days-to-time offset))))
+(defun my/org-roam-dailies-goto-weekly-note (&optional keys)
+  "Open the org-roam-dailies file for the most recent Sunday (the weekly note)."
+  (interactive)
+  (let ((weekly-date (my/org-roam-dailies-get-weekly-note-date)))
+    (org-roam-dailies--capture weekly-date t keys)))
+(map! :leader
+      :desc "Goto Weekly Note"
+      "n r d w" #'my/org-roam-dailies-goto-weekly-note)
 
 
 (after! lsp-haskell
